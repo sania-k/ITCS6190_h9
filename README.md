@@ -78,16 +78,44 @@ You can run the analysis tasks either locally.
    - `task_1/batch_0/*.csv`
    - `task_2/batch_0/*.csv`
    - `task_3/batch_0/*.csv`
-   Each task has a seperate directory, each filled with folders for each batch run. Each of these batch folders contain the output data, including the csv file. The csv file will contain data like this:
-
+   Each task has a seperate directory, each filled with folders for each batch run. Each of these batch folders contain the output data, including the csv file. The csv file widata comtains different columns depending on the task.
    
+   ### Task 1 Output Example:   
    ```bash
-   trip_id,driver_id,distance_km,fare_amount,timestamp,event_time
-   8d076a3f-12d2-4f92-a1a0-52adc8ac6486,83,32.6,91.77,2025-10-15 02:26:01,2025-10-15T02:26:01.000Z
+      trip_id,driver_id,distance_km,fare_amount,timestamp
+      4a7b923d-1057-4c12-bf8d-cb89c900d955,64,6.43,67.06,2025-10-15 02:49:53
+      f6b49a6c-2232-445e-b6d1-723b6f1c99b0,81,11.7,11.43,2025-10-15 02:49:54
+   ```
+   
+   ### Task 2 Output Example:   
+   ```bash
+      driver_id,total_fare,avg_distance
+      52,41.0,48.78
+      47,10.26,5.3
+      6,148.12,8.36
+      90,188.98,33.83
+      38,110.39,19.02
+      58,179.09,39.78
+      81,83.03,46.3
+      24,68.88,5.59
+      83,140.89,20.24
+      14,33.61,15.99
+      74,93.44,47.78
+      76,101.71,8.72
+   ```
+   
+   ### Task 3 Output Example:   
+   ```bash
+      window_start,window_end,sum_fare_amount
+      2025-10-15T03:40:00.000Z,2025-10-15T03:45:00.000Z,1720.1999999999998
+      2025-10-15T03:42:00.000Z,2025-10-15T03:47:00.000Z,1720.1999999999998
+      2025-10-15T03:44:00.000Z,2025-10-15T03:49:00.000Z,1720.1999999999998
+      2025-10-15T03:41:00.000Z,2025-10-15T03:46:00.000Z,1720.1999999999998
+      2025-10-15T03:43:00.000Z,2025-10-15T03:48:00.000Z,1720.1999999999998
    ```
 
 ---
 
 ## **Reflection**
-This assignment was fairly straightforward in implementation after going through documentation, however I started to have issues with my environment and Java and Python misconfigurations. I don't know why these have happened but until I can reconfigure everything, I ran this on Codespaces.
+This assignment was fairly straightforward in implementation after going through documentation, abliet with some slight snags due to logic errors and output moves. Most of my issues came from my environment on my machine due to new Java and Python misconfigurations. I don't know why these have happened, but until I can reconfigure everything, I ran this on Codespaces.
 
