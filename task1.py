@@ -19,7 +19,7 @@ df_raw = spark.readStream \
     .format("socket") \
     .option("host","localhost") \
     .option("port",9999) \
-    .load \
+    .load() \
 
 # Parse JSON data into columns using the defined schema
 df_parsed = df_raw.select(from_json(col("value"), schema).alias("data")) \

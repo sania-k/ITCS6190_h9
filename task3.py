@@ -20,7 +20,7 @@ df_raw = spark.readStream \
     .format("socket") \
     .option("host","localhost") \
     .option("port",9999) \
-    .load \
+    .load() \
 
 # Parse JSON data into columns using the defined schema
 df_parsed = df_raw.select(from_json(col("value"), schema).alias("data")) \
@@ -38,10 +38,8 @@ df_parsed = df_parsed.withWatermark("event_time", "1 minute")
 
 # Perform windowed aggregation: sum of fare_amount over a 5-minute window sliding by 1 minute
 df_windowed = df_parsed.groupBy(
-    window(col("event_time", "5 minutes", "1 minute")) \
-    .agg(sum(col("fare_amount")).alias("sum_fare_amount"))
-)
-
+    window("event_time", "5 minutes", "1 minute")) \
+    .agg(sum("fare_amount").alias("sum_fare_amount"))
 # Extract window start and end times as separate columns
 df_windowed = df_windowed.select(
     col("window.start").alias("window_start"),
