@@ -40,6 +40,7 @@ df_parsed = df_parsed.withWatermark("event_time", "1 minute")
 df_windowed = df_parsed.groupBy(
     window("event_time", "5 minutes", "1 minute")) \
     .agg(sum("fare_amount").alias("sum_fare_amount"))
+
 # Extract window start and end times as separate columns
 df_windowed = df_windowed.select(
     col("window.start").alias("window_start"),
@@ -59,8 +60,8 @@ def write_batch_to_csv(batch_df,batch_id):
 
 # Save the batch DataFrame as a CSV file with headers included    
 # Use foreachBatch to apply the function to each micro-batch
-query = df_parsed.writeStream \
-    .outputMode("append") \
+query = df_windowed.writeStream \
+    .outputMode("update") \
     .foreachBatch(write_batch_to_csv) \
     .option("checkpointLocation", "./checkpoints/task3_checkpoint") \
     .start()

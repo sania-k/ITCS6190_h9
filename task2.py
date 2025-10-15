@@ -36,7 +36,7 @@ df_parsed = df_parsed.withColumn("event_time", to_timestamp(col("timestamp"), "y
 df_parsed = df_parsed.withWatermark("event_time", "1 minute")
 
 # Compute aggregations: total fare and average distance grouped by driver_id
-agg = df_parsed.groupBy(col("driver_id")) \
+df_agg = df_parsed.groupBy(col("driver_id")) \
     .agg(
         sum(col("fare_amount")).alias("total_fare"),
         avg(col("distance_km")).alias("avg_distance")
@@ -53,8 +53,8 @@ def write_batch_to_csv(batch_df,batch_id):
     )   
 
 # Use foreachBatch to apply the function to each micro-batch
-query = df_parsed.writeStream \
-    .outputMode("append") \
+query = df_agg.writeStream \
+    .outputMode("complete") \
     .foreachBatch(write_batch_to_csv) \
     .option("checkpointLocation", "./checkpoints/task2_checkpoint") \
     .start()
