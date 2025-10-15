@@ -31,11 +31,23 @@ df_parsed = df_raw.select(from_json(col("value"), schema).alias("data")) \
                 col("data.timestamp").alias("timestamp")
             )
 
-# Print parsed data to the CSV files
+
+def write_batch(batch_df, batch_id):
+    # Write to CSV
+    batch_df.coalesce(1).write \
+        .mode("append") \
+        .option("header", "true") \
+        .csv(f"./output/task_1/batch_{batch_id}")
+    
+    # Also print to console
+    print(f"Batch {batch_id}:")
+    batch_df.show(truncate=False)
+
 query = df_parsed.writeStream \
     .outputMode("append") \
-    .format("console") \
-    .option("truncate", False) \
+    .foreachBatch(write_batch) \
+    .option("checkpointLocation", "./checkpoints/task1_checkpoint") \
     .start()
+
 
 query.awaitTermination()
